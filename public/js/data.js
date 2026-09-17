@@ -278,6 +278,27 @@ function fmt(n) {
     return "$" + Number(n).toLocaleString("es-CO");
 }
 
+async function cargarEntregas(tipo) {
+    try {
+        const response = await fetch('/api/entregas?type=' + encodeURIComponent(tipo), { credentials: 'same-origin' });
+        if (response.ok) return await response.json();
+    } catch(e) {}
+    if (tipo === 'active') return { items: getActivos() };
+    if (tipo === 'available') return { items: getDisponibles() };
+    return { items: [] };
+}
+
+async function actualizarEntrega(action, id) {
+    try {
+        const body = new URLSearchParams({ action, id_entrega: String(id) });
+        const response = await fetch('/api/entregas', { method: 'POST', body, credentials: 'same-origin' });
+        if (response.ok) return await response.json();
+    } catch(e) {}
+    if (action === 'accept') aceptarPedido(id);
+    if (action === 'advance') avanzarEstado(id);
+    return { updated: true };
+}
+
 function nowTime() {
     return new Date().toLocaleTimeString("es-CO", {
         hour: "2-digit",
