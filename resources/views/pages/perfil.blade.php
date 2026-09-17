@@ -1,25 +1,140 @@
 @extends('layouts.app')
 @section('content')
 <main class="scroll">
-  @if(session('status'))<div class="card" style="padding:12px;margin:0 16px 12px;color:#2d6a31">{{ session('status') }}</div>@endif
-  <header class="profile-header">
-    <img class="profile-header__logo" src="{{ asset('assets/logo_blanco.png') }}" alt="Shizen">
-    <div class="profile-header__avatar">{{ strtoupper(substr($repartidor['nombre'] ?? 'S', 0, 1).substr($repartidor['apellido'] ?? 'V', 0, 1)) }}</div>
-    <h1 class="profile-header__name">{{ $repartidor['nombre'] ?? 'Santiago' }} {{ $repartidor['apellido'] ?? 'Vargas' }}</h1>
-    <p class="profile-header__meta">{{ $repartidor['email'] ?? 'repartidor@shizen.test' }} · {{ $repartidor['vehiculo'] ?? 'Moto' }}</p>
-  </header>
-  <section class="card" style="padding:16px;margin:0 16px 16px">
-    <h2 style="font-size:17px;margin:0 0 14px">Datos del repartidor</h2>
-    <form action="{{ route('perfil.update') }}" method="post">
+  @if(session('status'))
+    <div style="margin:16px 16px 0;padding:12px 16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;color:#166534;font-size:14px;font-weight:600">
+      {{ session('status') }}
+    </div>
+  @endif
+
+  <!-- Encabezado verde -->
+  <div style="background:linear-gradient(135deg, #f0faf0, #ffffff);border-bottom:1px solid #c8e6c9;padding:38px 24px 28px;position:relative;text-align:center">
+    <img src="{{ asset('assets/logo_color.png') }}" alt="Shizen" style="position:absolute;top:30px;right:24px;height:32px;object-fit:contain;opacity:0.9">
+    <div style="display:flex;flex-direction:column;align-items:center">
+      <div style="width:88px;height:88px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 4px 16px rgba(0,0,0,0.15);font-size:32px;font-weight:bold;color:#4c9540">
+        {{ strtoupper(substr($repartidor['nombre'] ?? 'S', 0, 1) . substr($repartidor['apellido'] ?? 'V', 0, 1)) }}
+      </div>
+      <h1 style="color:#1b3a1d;font-size:22px;font-weight:700;margin:0 0 2px 0">
+        {{ $repartidor['nombre'] ?? 'Santiago' }} {{ $repartidor['apellido'] ?? 'Vargas' }}
+      </h1>
+      <p style="color:#555;font-size:13px;margin:0">
+        {{ $repartidor['email'] ?? 'repartidor@shizen.test' }} · {{ $repartidor['vehiculo'] ?? 'Moto' }}
+      </p>
+      <div style="margin-top:12px;display:inline-flex;align-items:center;background:#e8f5e9;padding:4px 12px;border-radius:16px">
+        <span style="width:8px;height:8px;background:#5cb85c;border-radius:50%;margin-right:6px"></span>
+        <span style="color:#2d6a31;font-size:12px;font-weight:500">En línea</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Información personal (Editable) -->
+  <div style="padding:20px 16px 0">
+    <div style="background:white;border-radius:12px;border:1px solid #e8f5e9;overflow:hidden;position:relative">
+      <div style="padding:14px 16px;border-bottom:1px solid #f3f4f6">
+        <h2 style="font-size:17px;font-weight:700;margin:0">Datos del Repartidor</h2>
+      </div>
+
+      <form action="{{ route('perfil.update') }}" method="post" style="padding:16px">
+        @csrf
+        <label class="field-group" style="display:block;margin-bottom:12px">
+          <small style="display:block;margin-bottom:4px;color:#6b7280;font-size:13px">Nombre</small>
+          <input class="field" type="text" name="nombre" value="{{ $repartidor['nombre'] ?? '' }}" required style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-family:'Inter',sans-serif;font-size:15px">
+        </label>
+        <label class="field-group" style="display:block;margin-bottom:12px">
+          <small style="display:block;margin-bottom:4px;color:#6b7280;font-size:13px">Apellido</small>
+          <input class="field" type="text" name="apellido" value="{{ $repartidor['apellido'] ?? '' }}" required style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-family:'Inter',sans-serif;font-size:15px">
+        </label>
+        <label class="field-group" style="display:block;margin-bottom:12px">
+          <small style="display:block;margin-bottom:4px;color:#6b7280;font-size:13px">Correo electrónico (no editable)</small>
+          <input class="field" type="email" value="{{ $repartidor['email'] ?? '' }}" readonly style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;background:#f9fafb;color:#6b7280;font-family:'Inter',sans-serif;font-size:15px">
+        </label>
+        <label class="field-group" style="display:block;margin-bottom:12px">
+          <small style="display:block;margin-bottom:4px;color:#6b7280;font-size:13px">Vehículo</small>
+          <select class="field" name="vehiculo" required style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-family:'Inter',sans-serif;font-size:15px">
+            <option value="Moto" {{ ($repartidor['vehiculo'] ?? '') === 'Moto' ? 'selected' : '' }}>Moto</option>
+            <option value="Bicicleta" {{ ($repartidor['vehiculo'] ?? '') === 'Bicicleta' ? 'selected' : '' }}>Bicicleta</option>
+            <option value="Carro" {{ ($repartidor['vehiculo'] ?? '') === 'Carro' ? 'selected' : '' }}>Carro</option>
+            <option value="Monopatín" {{ ($repartidor['vehiculo'] ?? '') === 'Monopatín' ? 'selected' : '' }}>Monopatín</option>
+          </select>
+        </label>
+        <button type="submit" class="btn-green" style="display:flex;align-items:center;justify-content:center;background:#4c9540;color:white;padding:12px;border-radius:10px;font-weight:700;cursor:pointer;width:100%;border:none;font-family:'Inter',sans-serif;font-size:15px;margin-top:8px">
+          Guardar cambios
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Estadísticas y Opciones -->
+  <div style="padding:20px 16px 0">
+    <h2 style="font-size:17px;font-weight:700;margin-bottom:12px">Actividad</h2>
+    <div style="background:white;border-radius:12px;border:1px solid #e8f5e9;overflow:hidden">
+      <!-- Entregas hoy -->
+      <div style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #f3f4f6">
+        <div style="display:flex;align-items:center;gap:12px">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2">
+            <path d="M5 8h14M5 8a2 2 0 1 0 0-4h14a2 2 0 1 0 0 4M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8m-9 4h4"/>
+          </svg>
+          <p style="font-size:15px;font-weight:600;margin:0">Entregas hoy</p>
+        </div>
+        <span style="font-size:16px;font-weight:700;color:#4c9540" id="profile-entregas-count">6</span>
+      </div>
+
+      <!-- Ganancias -->
+      <div style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #f3f4f6">
+        <div style="display:flex;align-items:center;gap:12px">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+          <p style="font-size:15px;font-weight:600;margin:0">Ganancias</p>
+        </div>
+        <span style="font-size:16px;font-weight:700;color:#4c9540" id="profile-ganancias-count">$25.800</span>
+      </div>
+
+      <!-- Configuración link -->
+      <a href="{{ route('configuracion') }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;text-decoration:none;color:inherit;transition:background 0.15s">
+        <div style="display:flex;align-items:center;gap:12px">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          <p style="font-size:15px;font-weight:600;margin:0">Configuración</p>
+        </div>
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" stroke-width="2">
+          <polyline points="9,18 15,12 9,6"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- Cerrar sesión -->
+  <div style="padding:20px 16px 32px">
+    <form action="{{ route('logout') }}" method="post">
       @csrf
-      <label class="field-group"><small>Nombre</small><input class="field" name="nombre" value="{{ $repartidor['nombre'] ?? '' }}" required></label>
-      <label class="field-group"><small>Apellido</small><input class="field" name="apellido" value="{{ $repartidor['apellido'] ?? '' }}" required></label>
-      <label class="field-group"><small>Correo electrónico</small><input class="field" value="{{ $repartidor['email'] ?? '' }}" readonly></label>
-      <label class="field-group"><small>Vehículo</small><select class="field" name="vehiculo"><option>Moto</option><option>Bicicleta</option><option>Carro</option><option>Monopatín</option></select></label>
-      <button class="btn-green" style="width:100%;padding:12px;margin-top:12px" type="submit">Guardar cambios</button>
+      <button type="submit" style="display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid #fee2e2;color:#ef4444;padding:12px;border-radius:10px;font-weight:700;cursor:pointer;width:100%;font-family:'Inter',sans-serif;font-size:15px">
+        Cerrar sesión
+      </button>
     </form>
-  </section>
-  <a class="card" style="display:block;padding:16px;margin:0 16px 12px;color:#2d6a31;text-decoration:none" href="{{ route('configuracion') }}">⚙ Configuración</a>
-  <form action="{{ route('logout') }}" method="post" style="margin:0 16px">@csrf<button class="btn-gray" style="width:100%;padding:12px" type="submit">Cerrar sesión</button></form>
+  </div>
 </main>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof getPerfil === 'function') {
+    const p = getPerfil();
+    if (p) {
+      if (document.getElementById('profile-entregas-count')) {
+        document.getElementById('profile-entregas-count').textContent = p.entregasHoy || '0';
+      }
+      if (document.getElementById('profile-ganancias-count') && typeof fmt === 'function') {
+        document.getElementById('profile-ganancias-count').textContent = fmt(p.gananciasHoy || 0);
+      }
+    }
+  }
+  if (typeof updateNavBadges === 'function') updateNavBadges();
+  if (typeof iniciarBotonEstadoRepartidor === 'function') iniciarBotonEstadoRepartidor();
+});
+</script>
+@endpush
