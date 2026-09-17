@@ -12,7 +12,6 @@
       <path stroke-linecap="round" stroke-linejoin="round" d="m4 7 8-4 8 4-8 4-8-4Zm0 0v10l8 4 8-4V7M12 11v10"/>
     </svg>
     <span>Activos</span>
-    <b class="badge" id="badge-activos"></b>
   </a>
 
   <button id="delivery-status-toggle" class="nav-status-toggle" type="button" aria-pressed="false">
@@ -29,7 +28,6 @@
       <path stroke-linecap="round" stroke-linejoin="round" d="M6 7h12l-1 13H7L6 7Zm3 0a3 3 0 0 1 6 0M9 12v4m6-4v4"/>
     </svg>
     <span>Pedidos</span>
-    <b class="badge" id="badge-pedidos"></b>
   </a>
 
   <a href="{{ route('perfil') }}" class="nav-item {{ request()->routeIs('perfil', 'configuracion') ? 'is-active' : '' }}" aria-label="Perfil">

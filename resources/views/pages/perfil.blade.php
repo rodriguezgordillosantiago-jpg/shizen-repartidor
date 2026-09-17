@@ -84,7 +84,6 @@
               {{ $emoji }} {{ $v }}
             </span>
           </div>
-          <span style="font-size:11px;color:#64748b;background:#f1f5f9;padding:3px 8px;border-radius:6px;font-weight:600">No editable</span>
         </div>
 
         <!-- Documentos asociados -->
@@ -180,3 +179,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endpush
+
