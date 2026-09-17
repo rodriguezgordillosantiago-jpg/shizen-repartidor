@@ -6,7 +6,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>{{ $title ?? 'Shizen Repartidor' }}</title>
   <link rel="stylesheet" href="{{ asset('css/repartidor.css') }}?v=compact-2">
-  <link rel="stylesheet" href="{{ asset('css/navigation.css') }}?v=compact-2">
+  <link rel="stylesheet" href="{{ asset('css/navigation.css') }}?v=compact-3">
   @stack('styles')
 </head>
 <body>
@@ -15,7 +15,7 @@
   <script>window.repartidorApiUrl = @json(url('/api/entregas'));</script>
   <script src="{{ asset('js/data.js') }}"></script>
   <div id="chat-root"></div>
-  <script src="{{ asset('js/chat.js') }}"></script>
+  <script src="{{ asset('js/chat.js') }}?v=compact-2"></script>
   <script>if (typeof initChat === 'function') initChat();</script>
   @stack('scripts')
 </body>
