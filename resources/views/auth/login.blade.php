@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shizen Repartidor - Iniciar sesión</title>
-  <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/login.css') }}?v=scale-1">
 </head>
 <body>
   <div class="blob-wrap"><svg class="blob" viewBox="0 0 375 332" preserveAspectRatio="none"><path d="M0 0h375v220c-35 60-95 40-155 50S60 250 0 260V0Z" fill="#2d6a31"/></svg></div>
