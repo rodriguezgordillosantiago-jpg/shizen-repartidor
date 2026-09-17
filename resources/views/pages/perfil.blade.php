@@ -30,26 +30,32 @@
   <!-- Información personal -->
   <div style="padding:20px 16px 0">
     <div class="card-container" style="background:white;border-radius:12px;border:1px solid #e8f5e9;overflow:hidden;position:relative">
-      <div style="padding:14px 16px;border-bottom:1px solid #f3f4f6">
+      <div style="padding:14px 16px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between">
         <h2 style="font-size:17px;font-weight:700;margin:0">Datos del Repartidor</h2>
+        <button type="button" id="btn-toggle-edit" onclick="toggleEdicionPerfil()" style="display:inline-flex;align-items:center;gap:6px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;padding:6px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+          </svg>
+          <span id="btn-toggle-edit-text">Editar</span>
+        </button>
       </div>
 
-      <form action="{{ route('perfil.update') }}" method="post" style="padding:16px">
+      <form id="form-perfil" action="{{ route('perfil.update') }}" method="post" style="padding:16px">
         @csrf
         <label class="field-group" style="display:block;margin-bottom:12px">
           <small style="display:block;margin-bottom:4px;color:#6b7280;font-size:13px">Nombre</small>
-          <input class="field" type="text" name="nombre" value="{{ $repartidor['nombre'] ?? '' }}" required style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-family:'Inter',sans-serif;font-size:15px">
+          <input id="campo-nombre" class="field" type="text" name="nombre" value="{{ $repartidor['nombre'] ?? '' }}" required readonly style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;background:#f9fafb;color:#374151;font-family:'Inter',sans-serif;font-size:15px;transition:all 0.2s">
         </label>
         <label class="field-group" style="display:block;margin-bottom:12px">
           <small style="display:block;margin-bottom:4px;color:#6b7280;font-size:13px">Apellido</small>
-          <input class="field" type="text" name="apellido" value="{{ $repartidor['apellido'] ?? '' }}" required style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-family:'Inter',sans-serif;font-size:15px">
+          <input id="campo-apellido" class="field" type="text" name="apellido" value="{{ $repartidor['apellido'] ?? '' }}" required readonly style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;background:#f9fafb;color:#374151;font-family:'Inter',sans-serif;font-size:15px;transition:all 0.2s">
         </label>
         <label class="field-group" style="display:block;margin-bottom:12px">
           <small style="display:block;margin-bottom:4px;color:#6b7280;font-size:13px">Correo electrónico (no editable)</small>
           <input class="field" type="email" value="{{ $repartidor['email'] ?? '' }}" readonly style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;background:#f9fafb;color:#6b7280;font-family:'Inter',sans-serif;font-size:15px">
         </label>
         <input type="hidden" name="vehiculo" value="{{ $repartidor['vehiculo'] ?? 'Moto' }}">
-        <button type="submit" class="btn-green" style="display:flex;align-items:center;justify-content:center;background:#4c9540;color:white;padding:12px;border-radius:10px;font-weight:700;cursor:pointer;width:100%;border:none;font-family:'Inter',sans-serif;font-size:15px;margin-top:8px">
+        <button id="btn-guardar-perfil" type="submit" class="btn-green" style="display:none;align-items:center;justify-content:center;background:#4c9540;color:white;padding:12px;border-radius:10px;font-weight:700;cursor:pointer;width:100%;border:none;font-family:'Inter',sans-serif;font-size:15px;margin-top:8px">
           Guardar datos personales
         </button>
       </form>
@@ -162,6 +168,47 @@
 
 @push('scripts')
 <script>
+let editando = false;
+function toggleEdicionPerfil() {
+  editando = !editando;
+  const btnToggle = document.getElementById('btn-toggle-edit');
+  const btnText = document.getElementById('btn-toggle-edit-text');
+  const btnGuardar = document.getElementById('btn-guardar-perfil');
+  const inputNombre = document.getElementById('campo-nombre');
+  const inputApellido = document.getElementById('campo-apellido');
+
+  if (!btnToggle || !inputNombre || !inputApellido) return;
+
+  if (editando) {
+    inputNombre.removeAttribute('readonly');
+    inputApellido.removeAttribute('readonly');
+    inputNombre.style.background = '#ffffff';
+    inputApellido.style.background = '#ffffff';
+    inputNombre.style.borderColor = '#4c9540';
+    inputApellido.style.borderColor = '#4c9540';
+    if (btnGuardar) btnGuardar.style.display = 'flex';
+    if (btnText) btnText.textContent = 'Cancelar';
+    btnToggle.style.background = '#fef2f2';
+    btnToggle.style.borderColor = '#fecaca';
+    btnToggle.style.color = '#dc2626';
+    inputNombre.focus();
+  } else {
+    inputNombre.setAttribute('readonly', 'true');
+    inputApellido.setAttribute('readonly', 'true');
+    inputNombre.value = inputNombre.defaultValue;
+    inputApellido.value = inputApellido.defaultValue;
+    inputNombre.style.background = '#f9fafb';
+    inputApellido.style.background = '#f9fafb';
+    inputNombre.style.borderColor = '#e5e7eb';
+    inputApellido.style.borderColor = '#e5e7eb';
+    if (btnGuardar) btnGuardar.style.display = 'none';
+    if (btnText) btnText.textContent = 'Editar';
+    btnToggle.style.background = '#f0fdf4';
+    btnToggle.style.borderColor = '#bbf7d0';
+    btnToggle.style.color = '#166534';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   if (typeof getPerfil === 'function') {
     const p = getPerfil();
