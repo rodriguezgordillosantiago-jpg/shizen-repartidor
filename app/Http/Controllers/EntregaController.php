@@ -13,6 +13,31 @@ class EntregaController extends Controller
         $courier = $this->courier($request);
         $type = $request->query('type', 'available');
 
+        if ($type === 'stats') {
+            $stats = DB::table('repartidor as r')
+                ->join('usuario as u', 'u.id_usuario', '=', 'r.id_usuario')
+                ->leftJoin('entrega as e', 'e.id_repartidor', '=', 'r.id_repartidor')
+                ->leftJoin('compra as c', 'c.id_compra', '=', 'e.id_compra')
+                ->leftJoin('calificacion_repartidor as cr', 'cr.id_repartidor', '=', 'r.id_repartidor')
+                ->where('r.id_repartidor', $courier->id_repartidor)
+                ->selectRaw(
+                    'u.nombre, u.apellido,
+                     COUNT(CASE WHEN e.fecha_entrega IS NOT NULL AND DATE(e.fecha_entrega) = CURDATE() THEN 1 END) AS entregas_hoy,
+                     COALESCE(SUM(CASE WHEN e.fecha_entrega IS NOT NULL AND DATE(e.fecha_entrega) = CURDATE() THEN c.total ELSE 0 END), 0) AS ganancias_hoy,
+                     COALESCE(AVG(cr.puntuacion), 0) AS calificacion'
+                )
+                ->groupBy('r.id_repartidor', 'u.nombre', 'u.apellido')
+                ->first();
+
+            return response()->json([
+                'nombre' => $stats->nombre ?? '',
+                'apellido' => $stats->apellido ?? '',
+                'entregasHoy' => (int)($stats->entregas_hoy ?? 0),
+                'gananciasHoy' => (float)($stats->ganancias_hoy ?? 0),
+                'calificacion' => round((float)($stats->calificacion ?? 0), 1),
+            ]);
+        }
+
         $query = DB::table('entrega as e')
             ->join('compra as c', 'c.id_compra', '=', 'e.id_compra')
             ->join('pedido as p', 'p.id_pedido', '=', 'c.id_pedido')

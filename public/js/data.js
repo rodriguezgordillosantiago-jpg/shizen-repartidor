@@ -64,6 +64,17 @@ function setHistorial(v) {
 function getPerfil() {
     return _get("perfil");
 }
+
+async function cargarEstadisticas() {
+    const response = await fetch((window.repartidorApiUrl || "/api/entregas") + "?type=stats", {
+        credentials: "same-origin",
+    });
+    const result = await response.json();
+    if (!response.ok) {
+        throw new Error(result.error || "No fue posible cargar las estadísticas.");
+    }
+    return result;
+}
 function setPerfil(v) {
     _set("perfil", v);
 }

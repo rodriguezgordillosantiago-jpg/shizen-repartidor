@@ -1,8 +1,8 @@
 *,*::before,*::after{box-sizing:border-box}
 :root{--green-950:#173d24;--green-800:#236338;--green-700:#2f7a43;--green-500:#56a35b;--green-100:#e8f4e8;--cream:#f5f8f3;--ink:#193024;--muted:#718078;--line:#e1ebe1;--shadow:0 10px 28px rgba(32,77,44,.08)}
 html{min-height:100%;background:#dfeadf}
-body{margin:0 auto;width:min(100%,430px);height:auto;min-height:0;overflow:visible;background:var(--cream);color:var(--ink);font-family:"Inter",sans-serif;position:relative}
-.scroll{height:auto;min-height:0;overflow:visible;padding:24px 18px 84px;scrollbar-width:none}.scroll::-webkit-scrollbar{display:none}.scroll>h1{font-size:25px!important}.scroll>p{font-size:14px!important}
+body{margin:0 auto;width:min(100%,430px);height:100dvh;min-height:100dvh;overflow:hidden;background:var(--cream);color:var(--ink);font-family:"Inter",sans-serif;position:relative}
+.scroll{height:100%;min-height:0;overflow-y:auto;padding:24px 18px 84px;scrollbar-width:none}.scroll::-webkit-scrollbar{display:none}.scroll>h1{font-size:25px!important}.scroll>p{font-size:14px!important}
 h1,h2,h3,p{margin-top:0}.scroll>h1{font-size:25px;letter-spacing:-.04em;margin-bottom:6px}.scroll>h2{font-size:18px;letter-spacing:-.02em;margin:24px 0 12px}
 .card{background:#fff;border:1px solid rgba(41,103,56,.09);border-radius:18px;box-shadow:var(--shadow)}
 .muted{color:var(--muted);font-size:12px;line-height:1.5}
