@@ -86,7 +86,7 @@ async function deliverWithClientCode(id) {
   }
   try {
     const body = new URLSearchParams({ action: 'deliver_client_code', id_entrega: String(id), codigo_cliente: codigo });
-    const resp = await fetch('/api/entregas', { method: 'POST', body, credentials: 'same-origin', headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' } });
+    const resp = await fetch(window.repartidorApiUrl || '/api/entregas', { method: 'POST', body, credentials: 'same-origin', headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '', Accept: 'application/json' } });
     const result = await resp.json();
     if (!resp.ok || result.error) throw new Error(result.error || 'Error al finalizar.');
     alert('¡Entrega finalizada correctamente!');

@@ -132,7 +132,7 @@ function fmt(n) {
 async function cargarEntregas(tipo) {
     try {
         const response = await fetch(
-            "/api/entregas?type=" + encodeURIComponent(tipo),
+            (window.repartidorApiUrl || "/api/entregas") + "?type=" + encodeURIComponent(tipo),
             { credentials: "same-origin" },
         );
         if (response.ok) return await response.json();
@@ -145,10 +145,14 @@ async function cargarEntregas(tipo) {
 async function actualizarEntrega(action, id) {
     try {
         const body = new URLSearchParams({ action, id_entrega: String(id) });
-        const response = await fetch("/api/entregas", {
+        const response = await fetch(window.repartidorApiUrl || "/api/entregas", {
             method: "POST",
             body,
             credentials: "same-origin",
+            headers: {
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')?.content || "",
+                "Accept": "application/json",
+            },
         });
         if (response.ok) return await response.json();
     } catch (e) {}

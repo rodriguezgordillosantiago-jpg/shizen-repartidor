@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InicioController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\EntregaController;
 use Illuminate\Http\Request;
 
 // Inicio
@@ -47,3 +48,5 @@ Route::post('/logout', function (Request $request) {
 Route::post('/auth/login.php', [\App\Http\Controllers\AuthController::class, 'login']);
 Route::post('/auth/login', [\App\Http\Controllers\AuthController::class, 'login']);
 Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login'])->name('login.submit');
+Route::get('/api/entregas', [EntregaController::class, 'index']);
+Route::post('/api/entregas', [EntregaController::class, 'update']);
