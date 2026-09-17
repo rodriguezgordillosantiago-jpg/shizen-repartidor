@@ -56,7 +56,7 @@
     </div>
   </div>
 
-  <!-- Caja Pequeña: Vehículo y Documentos -->
+  <!-- Caja: Vehículo y Documentos (No editable) -->
   <div style="padding:16px 16px 0">
     <div style="background:white;border-radius:12px;border:1px solid #e8f5e9;overflow:hidden">
       <div style="padding:14px 16px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between">
@@ -66,23 +66,29 @@
         <span style="font-size:12px;color:#166534;background:#dcfce7;font-weight:700;padding:2px 8px;border-radius:99px">En regla</span>
       </div>
 
-      <form action="{{ route('perfil.update') }}" method="post" style="padding:14px 16px">
-        @csrf
-        <input type="hidden" name="nombre" value="{{ $repartidor['nombre'] ?? '' }}">
-        <input type="hidden" name="apellido" value="{{ $repartidor['apellido'] ?? '' }}">
-        
-        <label class="field-group" style="display:block;margin-bottom:12px">
-          <small style="display:block;margin-bottom:4px;color:#6b7280;font-size:12px;font-weight:600">Tipo de vehículo asignado</small>
-          <select class="field" name="vehiculo" onchange="this.form.submit()" style="width:100%;padding:8px 10px;border:1px solid #d1d5db;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;background:#f9fafb;font-weight:600">
-            <option value="Moto" {{ ($repartidor['vehiculo'] ?? '') === 'Moto' ? 'selected' : '' }}>🏍️ Moto</option>
-            <option value="Bicicleta" {{ ($repartidor['vehiculo'] ?? '') === 'Bicicleta' ? 'selected' : '' }}>🚲 Bicicleta</option>
-            <option value="Carro" {{ ($repartidor['vehiculo'] ?? '') === 'Carro' ? 'selected' : '' }}>🚗 Carro</option>
-            <option value="Monopatín" {{ ($repartidor['vehiculo'] ?? '') === 'Monopatín' ? 'selected' : '' }}>🛴 Monopatín</option>
-          </select>
-        </label>
+      <div style="padding:14px 16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;margin-bottom:10px">
+          <div>
+            <small style="display:block;color:#6b7280;font-size:11px;font-weight:600">Tipo de vehículo registrado</small>
+            <span style="font-size:15px;font-weight:700;color:#0f172a">
+              @php
+                $v = $repartidor['vehiculo'] ?? 'Moto';
+                $emoji = match(strtolower($v)) {
+                  'moto' => '🏍️',
+                  'bicicleta' => '🚲',
+                  'carro' => '🚗',
+                  'monopatín', 'monopatin' => '🛴',
+                  default => '🛵'
+                };
+              @endphp
+              {{ $emoji }} {{ $v }}
+            </span>
+          </div>
+          <span style="font-size:11px;color:#64748b;background:#f1f5f9;padding:3px 8px;border-radius:6px;font-weight:600">No editable</span>
+        </div>
 
         <!-- Documentos asociados -->
-        <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">
+        <div style="display:flex;flex-direction:column;gap:6px">
           <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#f8fafc;border-radius:6px;border:1px solid #f1f5f9;font-size:12px">
             <span style="color:#334155;font-weight:600">🪪 Licencia de conducción</span>
             <span style="color:#16a34a;font-weight:700">✓ Validada</span>
@@ -96,7 +102,7 @@
             <span style="color:#16a34a;font-weight:700">✓ Registrada</span>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 
@@ -132,7 +138,7 @@
         <div style="display:flex;align-items:center;gap:12px">
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2">
             <circle cx="12" cy="12" r="3"/>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
           </svg>
           <p style="font-size:14px;font-weight:600;margin:0">Configuración</p>
         </div>
