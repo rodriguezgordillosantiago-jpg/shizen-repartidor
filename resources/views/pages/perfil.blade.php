@@ -27,7 +27,7 @@
     </div>
   </div>
 
-  <!-- Información personal (Editable) -->
+  <!-- Información personal -->
   <div style="padding:20px 16px 0">
     <div style="background:white;border-radius:12px;border:1px solid #e8f5e9;overflow:hidden;position:relative">
       <div style="padding:14px 16px;border-bottom:1px solid #f3f4f6">
@@ -48,57 +48,93 @@
           <small style="display:block;margin-bottom:4px;color:#6b7280;font-size:13px">Correo electrónico (no editable)</small>
           <input class="field" type="email" value="{{ $repartidor['email'] ?? '' }}" readonly style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;background:#f9fafb;color:#6b7280;font-family:'Inter',sans-serif;font-size:15px">
         </label>
-        <label class="field-group" style="display:block;margin-bottom:12px">
-          <small style="display:block;margin-bottom:4px;color:#6b7280;font-size:13px">Vehículo</small>
-          <select class="field" name="vehiculo" required style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-family:'Inter',sans-serif;font-size:15px">
-            <option value="Moto" {{ ($repartidor['vehiculo'] ?? '') === 'Moto' ? 'selected' : '' }}>Moto</option>
-            <option value="Bicicleta" {{ ($repartidor['vehiculo'] ?? '') === 'Bicicleta' ? 'selected' : '' }}>Bicicleta</option>
-            <option value="Carro" {{ ($repartidor['vehiculo'] ?? '') === 'Carro' ? 'selected' : '' }}>Carro</option>
-            <option value="Monopatín" {{ ($repartidor['vehiculo'] ?? '') === 'Monopatín' ? 'selected' : '' }}>Monopatín</option>
-          </select>
-        </label>
+        <input type="hidden" name="vehiculo" value="{{ $repartidor['vehiculo'] ?? 'Moto' }}">
         <button type="submit" class="btn-green" style="display:flex;align-items:center;justify-content:center;background:#4c9540;color:white;padding:12px;border-radius:10px;font-weight:700;cursor:pointer;width:100%;border:none;font-family:'Inter',sans-serif;font-size:15px;margin-top:8px">
-          Guardar cambios
+          Guardar datos personales
         </button>
       </form>
     </div>
   </div>
 
+  <!-- Caja Pequeña: Vehículo y Documentos -->
+  <div style="padding:16px 16px 0">
+    <div style="background:white;border-radius:12px;border:1px solid #e8f5e9;overflow:hidden">
+      <div style="padding:14px 16px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between">
+        <h2 style="font-size:16px;font-weight:700;margin:0;display:flex;align-items:center;gap:8px">
+          🛵 Vehículo y Documentos
+        </h2>
+        <span style="font-size:12px;color:#166534;background:#dcfce7;font-weight:700;padding:2px 8px;border-radius:99px">En regla</span>
+      </div>
+
+      <form action="{{ route('perfil.update') }}" method="post" style="padding:14px 16px">
+        @csrf
+        <input type="hidden" name="nombre" value="{{ $repartidor['nombre'] ?? '' }}">
+        <input type="hidden" name="apellido" value="{{ $repartidor['apellido'] ?? '' }}">
+        
+        <label class="field-group" style="display:block;margin-bottom:12px">
+          <small style="display:block;margin-bottom:4px;color:#6b7280;font-size:12px;font-weight:600">Tipo de vehículo asignado</small>
+          <select class="field" name="vehiculo" onchange="this.form.submit()" style="width:100%;padding:8px 10px;border:1px solid #d1d5db;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;background:#f9fafb;font-weight:600">
+            <option value="Moto" {{ ($repartidor['vehiculo'] ?? '') === 'Moto' ? 'selected' : '' }}>🏍️ Moto</option>
+            <option value="Bicicleta" {{ ($repartidor['vehiculo'] ?? '') === 'Bicicleta' ? 'selected' : '' }}>🚲 Bicicleta</option>
+            <option value="Carro" {{ ($repartidor['vehiculo'] ?? '') === 'Carro' ? 'selected' : '' }}>🚗 Carro</option>
+            <option value="Monopatín" {{ ($repartidor['vehiculo'] ?? '') === 'Monopatín' ? 'selected' : '' }}>🛴 Monopatín</option>
+          </select>
+        </label>
+
+        <!-- Documentos asociados -->
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#f8fafc;border-radius:6px;border:1px solid #f1f5f9;font-size:12px">
+            <span style="color:#334155;font-weight:600">🪪 Licencia de conducción</span>
+            <span style="color:#16a34a;font-weight:700">✓ Validada</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#f8fafc;border-radius:6px;border:1px solid #f1f5f9;font-size:12px">
+            <span style="color:#334155;font-weight:600">📄 SOAT</span>
+            <span style="color:#16a34a;font-weight:700">✓ Vigente</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#f8fafc;border-radius:6px;border:1px solid #f1f5f9;font-size:12px">
+            <span style="color:#334155;font-weight:600">📋 Tarjeta de propiedad</span>
+            <span style="color:#16a34a;font-weight:700">✓ Registrada</span>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Estadísticas y Opciones -->
-  <div style="padding:20px 16px 0">
-    <h2 style="font-size:17px;font-weight:700;margin-bottom:12px">Actividad</h2>
+  <div style="padding:16px 16px 0">
+    <h2 style="font-size:16px;font-weight:700;margin-bottom:10px">Actividad</h2>
     <div style="background:white;border-radius:12px;border:1px solid #e8f5e9;overflow:hidden">
       <!-- Entregas hoy -->
-      <div style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #f3f4f6">
+      <div style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #f3f4f6">
         <div style="display:flex;align-items:center;gap:12px">
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2">
             <path d="M5 8h14M5 8a2 2 0 1 0 0-4h14a2 2 0 1 0 0 4M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8m-9 4h4"/>
           </svg>
-          <p style="font-size:15px;font-weight:600;margin:0">Entregas hoy</p>
+          <p style="font-size:14px;font-weight:600;margin:0">Entregas hoy</p>
         </div>
-        <span style="font-size:16px;font-weight:700;color:#4c9540" id="profile-entregas-count">6</span>
+        <span style="font-size:15px;font-weight:700;color:#4c9540" id="profile-entregas-count">6</span>
       </div>
 
       <!-- Ganancias -->
-      <div style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #f3f4f6">
+      <div style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #f3f4f6">
         <div style="display:flex;align-items:center;gap:12px">
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2">
             <circle cx="12" cy="12" r="10"/>
             <path d="M12 6v6l4 2"/>
           </svg>
-          <p style="font-size:15px;font-weight:600;margin:0">Ganancias</p>
+          <p style="font-size:14px;font-weight:600;margin:0">Ganancias</p>
         </div>
-        <span style="font-size:16px;font-weight:700;color:#4c9540" id="profile-ganancias-count">$25.800</span>
+        <span style="font-size:15px;font-weight:700;color:#4c9540" id="profile-ganancias-count">$25.800</span>
       </div>
 
       <!-- Configuración link -->
-      <a href="{{ route('configuracion') }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;text-decoration:none;color:inherit;transition:background 0.15s">
+      <a href="{{ route('configuracion') }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;text-decoration:none;color:inherit;transition:background 0.15s">
         <div style="display:flex;align-items:center;gap:12px">
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2">
             <circle cx="12" cy="12" r="3"/>
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
           </svg>
-          <p style="font-size:15px;font-weight:600;margin:0">Configuración</p>
+          <p style="font-size:14px;font-weight:600;margin:0">Configuración</p>
         </div>
         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" stroke-width="2">
           <polyline points="9,18 15,12 9,6"/>
